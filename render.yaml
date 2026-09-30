@@ -1,67 +1,61 @@
+# Two Render cron jobs. Both wake up every 15 minutes (Render cron is UTC);
+# main.py checks config.py (GENERATE_TIME / PUBLISH_TIME, Asia/Taipei) and the
+# sheet's _state tab, so each job really runs once a day.
+# Change the times in config.py, not here.
+# (BUFFER_*_CHANNEL_ID are optional; leave them empty if you have one FB and one IG channel.)
 services:
-  - type: web
-    name: post-agent-demo
+  - type: cron
+    name: autopost-generate
     runtime: python
-    plan: free
-    # The posting time is set in config.py. The service waits until then,
-    # posts once, then idles and gets spun down by Render (free plan).
+    schedule: "*/15 * * * *"
     buildCommand: pip install -r requirements.txt
-    startCommand: python post.py
-    healthCheckPath: /
+    startCommand: python main.py generate
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
-      - key: META_API_VERSION
-        value: v20.0
-      - key: META_APP_ID
-        sync: false
-      - key: META_APP_SECRET
-        sync: false
-      - key: META_PAGE_ID
-        sync: false
-      - key: META_INSTAGRAM_ACCOUNT_ID
-        sync: false
-      - key: META_PAGE_ACCESS_TOKEN
-        sync: false
-      - key: CLOUDINARY_CLOUD_NAME
-        sync: false
-      - key: CLOUDINARY_API_KEY
-        sync: false
-      - key: CLOUDINARY_API_SECRET
-        sync: false
-      - key: CLOUDINARY_UPLOAD_FOLDER
-        value: auto_posting
-
-  - type: web
-    name: post-openai-news
-    runtime: python
-    plan: free
-    # Posting time/topic are set in config_openai.py.
-    buildCommand: pip install -r requirements.txt
-    startCommand: python post_openai.py
-    healthCheckPath: /
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.9
-      - key: META_API_VERSION
-        value: v20.0
-      - key: META_APP_ID
-        sync: false
-      - key: META_APP_SECRET
-        sync: false
-      - key: META_PAGE_ID
-        sync: false
-      - key: META_INSTAGRAM_ACCOUNT_ID
-        sync: false
-      - key: META_PAGE_ACCESS_TOKEN
-        sync: false
-      - key: CLOUDINARY_CLOUD_NAME
-        sync: false
-      - key: CLOUDINARY_API_KEY
-        sync: false
-      - key: CLOUDINARY_API_SECRET
-        sync: false
       - key: OPENAI_API_KEY
         sync: false
-      - key: CLOUDINARY_UPLOAD_FOLDER
-        value: auto_posting
+      - key: GOOGLE_SHEET_ID
+        sync: false
+      - key: GOOGLE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: BUFFER_API_KEY
+        sync: false
+      - key: BUFFER_FACEBOOK_CHANNEL_ID
+        sync: false
+      - key: BUFFER_INSTAGRAM_CHANNEL_ID
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+  - type: cron
+    name: autopost-publish
+    runtime: python
+    schedule: "*/15 * * * *"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py publish
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: GOOGLE_SHEET_ID
+        sync: false
+      - key: GOOGLE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: BUFFER_API_KEY
+        sync: false
+      - key: BUFFER_FACEBOOK_CHANNEL_ID
+        sync: false
+      - key: BUFFER_INSTAGRAM_CHANNEL_ID
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false

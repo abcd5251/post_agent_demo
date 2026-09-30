@@ -30,7 +30,7 @@ from dotenv import load_dotenv
 
 import config
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent  # repo root (assets/, .env)
 TEXT_FILE = BASE_DIR / config.TEXT_FILE
 IMAGE_FILE = BASE_DIR / config.IMAGE_FILE
 TZ = ZoneInfo(config.TIMEZONE)

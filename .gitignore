@@ -62,3 +62,7 @@ temp/
 
 # post_openai.py output
 generated/
+
+# Google service account key
+google-service-account.json
+*service-account*.json

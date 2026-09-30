@@ -1,4 +1,6 @@
 requests>=2.31
 python-dotenv>=1.0
-cloudinary>=1.40
 openai>=1.99
+gspread>=6.1
+feedparser>=6.0
+cloudinary>=1.40

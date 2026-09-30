@@ -58,3 +58,9 @@ No recognizable real people; any people are small, generic and faceless."""
 
 # 貼文最後加的 AI 生成聲明
 DISCLAIMER = "（本文由 AI 搜尋新聞後自動整理，圖片為 AI 生成示意圖）"
+
+# fetch_news.py：定時搜尋新聞，存到 assets/<日期時間>/text.txt + image.png
+FETCH_INTERVAL_SECONDS = 60          # 每隔幾秒抓一次（從上一次開始算；上一次還沒做完就等它做完）
+FETCH_MAX_RUNS = None                # 最多抓幾次，None = 一直跑到按 Ctrl+C
+FETCH_OUTPUT_DIR = "assets"
+FETCH_FOLDER_FORMAT = "%Y-%m-%d_%H-%M-%S"   # 資料夾名稱格式（依 TIMEZONE）

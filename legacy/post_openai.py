@@ -42,8 +42,9 @@ def has_english(text):
     return re.search(r"[A-Za-z]{2,}", text) is not None
 
 
-def generate_content():
-    """Return (caption, image_path) generated from the latest news."""
+def generate_content(image_path=None):
+    """Return (caption, image_path) generated from the latest news.
+    The image is saved to image_path, or to generated/news_<timestamp>.png."""
     client = OpenAI(api_key=env("OPENAI_API_KEY"))
 
     log(f"searching news for {cfg.TOPIC!r} with {cfg.TEXT_MODEL}...")
@@ -72,8 +73,8 @@ def generate_content():
         prompt=cfg.IMAGE_PROMPT.format(scene=scene),
         size=cfg.IMAGE_SIZE,
     )
-    OUTPUT_DIR.mkdir(exist_ok=True)
-    image_path = OUTPUT_DIR / f"news_{datetime.now(TZ):%Y%m%d_%H%M%S}.png"
+    image_path = image_path or OUTPUT_DIR / f"news_{datetime.now(TZ):%Y%m%d_%H%M%S}.png"
+    image_path.parent.mkdir(parents=True, exist_ok=True)
     image_path.write_bytes(base64.b64decode(image.data[0].b64_json))
     log(f"image saved: {image_path}")
     return caption, image_path
