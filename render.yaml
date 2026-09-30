@@ -1,0 +1,67 @@
+services:
+  - type: web
+    name: post-agent-demo
+    runtime: python
+    plan: free
+    # The posting time is set in config.py. The service waits until then,
+    # posts once, then idles and gets spun down by Render (free plan).
+    buildCommand: pip install -r requirements.txt
+    startCommand: python post.py
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: META_API_VERSION
+        value: v20.0
+      - key: META_APP_ID
+        sync: false
+      - key: META_APP_SECRET
+        sync: false
+      - key: META_PAGE_ID
+        sync: false
+      - key: META_INSTAGRAM_ACCOUNT_ID
+        sync: false
+      - key: META_PAGE_ACCESS_TOKEN
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLOUDINARY_UPLOAD_FOLDER
+        value: auto_posting
+
+  - type: web
+    name: post-openai-news
+    runtime: python
+    plan: free
+    # Posting time/topic are set in config_openai.py.
+    buildCommand: pip install -r requirements.txt
+    startCommand: python post_openai.py
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: META_API_VERSION
+        value: v20.0
+      - key: META_APP_ID
+        sync: false
+      - key: META_APP_SECRET
+        sync: false
+      - key: META_PAGE_ID
+        sync: false
+      - key: META_INSTAGRAM_ACCOUNT_ID
+        sync: false
+      - key: META_PAGE_ACCESS_TOKEN
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: CLOUDINARY_UPLOAD_FOLDER
+        value: auto_posting
