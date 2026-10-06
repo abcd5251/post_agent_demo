@@ -57,8 +57,10 @@ class Buffer:
     def schedule(self, platform, text, image_url, due):
         """Create a scheduled post; `due` is an aware datetime. Returns the Buffer post id."""
         due_at = due.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
-        metadata = ("metadata: { instagram: { type: post, shouldShareToFeed: true } }"
-                    if platform == "instagram" else "")
+        metadata = {
+            "instagram": "metadata: { instagram: { type: post, shouldShareToFeed: true } }",
+            "facebook": "metadata: { facebook: { type: post } }",
+        }.get(platform, "")
         result = self.gql(f"""
         mutation {{
           createPost(input: {{
